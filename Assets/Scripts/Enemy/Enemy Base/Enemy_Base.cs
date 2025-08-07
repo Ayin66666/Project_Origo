@@ -1,11 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+
 public abstract class Enemy_Base : MonoBehaviour
 {
-    // Component
+    [Header("---Component---")]
     [SerializeField] protected Enemy_StatusUI statusUI;
     [SerializeField] protected GameObject body;
     [SerializeField] protected Animator anim;
@@ -13,14 +13,14 @@ public abstract class Enemy_Base : MonoBehaviour
     protected NavMeshAgent nav;
     protected Collider collider;
 
-    // Target Setting
+
+    [Header("---Target Setting---")]
     [SerializeField] protected GameObject target;
     [SerializeField] protected GameObject searchArea;
     protected Vector3 moveDir;
     protected Vector3 lookDir;
     protected float targetDistance;
 
-    // Status 
     [Header("---Status---")]
     public Enemy_StatusSO status;
     public enum Enemy_Type { Normal, Elite, Boss }
@@ -58,6 +58,7 @@ public abstract class Enemy_Base : MonoBehaviour
     public State state;
     public enum HitType { None, Groggy }
 
+
     protected void Awake() 
     {
         // Get Component
@@ -71,15 +72,8 @@ public abstract class Enemy_Base : MonoBehaviour
 
     public void Target_Search(GameObject player)
     {
-        if (target == null)
-        {
-            target = player;
-            searchArea.SetActive(false);
-        }
-        else
-        {
-            searchArea.SetActive(false);
-        }
+        if (target == null) target = player;
+        searchArea.SetActive(false);
     }
 
     protected void LookAt()
@@ -100,6 +94,7 @@ public abstract class Enemy_Base : MonoBehaviour
             this.transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 5);
         }
     }
+
     protected void HardLook()
     {
         // 기존 처다보기 기능에서 2.5배 빠르게 쳐다봄
@@ -141,12 +136,7 @@ public abstract class Enemy_Base : MonoBehaviour
 
     public void TakeDamage(int damage, int armorPenetration, HitType type) 
     {
-        Debug.Log("isHit" + "Damage : " + damage + " / AP : " + armorPenetration);
-        Debug.Log("isIvincible : " + isIvincible);
-        if(isIvincible)
-        {
-            return;
-        }
+        if(isIvincible) return;
 
         // Damage Cal (ArmorPenetration Cal)
         int hitDamage = (damage - (status.Defense - armorPenetration));
@@ -180,15 +170,11 @@ public abstract class Enemy_Base : MonoBehaviour
 
                     // Hit Ivincible
                     if (!isIvincible)
-                    {
                         StartCoroutine(nameof(Hit_Ivincible));
-                    }
 
                     // Hp check
                     if (curHp <= 0)
-                    {
                         Die();
-                    }
                 }
                 else
                 {
@@ -202,9 +188,7 @@ public abstract class Enemy_Base : MonoBehaviour
 
                     // Hit Ivincible
                     if (!isIvincible)
-                    {
                         StartCoroutine(nameof(Hit_Ivincible));
-                    }
 
                     // Hp check
                     if (curHp <= 0)
@@ -215,9 +199,7 @@ public abstract class Enemy_Base : MonoBehaviour
                     {
                         // Groggy Check
                         if (curSuperArmor >= maxSuperArmor && !isGroggy)
-                        {
                             Groggy();
-                        }
                     }
                 }
                 break;
@@ -244,9 +226,7 @@ public abstract class Enemy_Base : MonoBehaviour
     protected void SuperArmor_Setting()
     {
         if(groggyResetTimer > 0)
-        {
             groggyResetTimer -= Time.deltaTime;
-        }
 
         if (groggyResetTimer <= 0)
         {
@@ -265,10 +245,9 @@ public abstract class Enemy_Base : MonoBehaviour
     protected void Ignore_PlayerCollider(bool isOn)
     {
         Collider targetColl = target.GetComponent<Collider>();
+
         if(targetColl != null)
-        {
             Physics.IgnoreCollision(targetColl, collider, isOn);
-        }
     }
 
     protected IEnumerator Hit_Ivincible()

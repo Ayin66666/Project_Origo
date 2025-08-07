@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
 
 public class Area_PhaseChage : MonoBehaviour
 {
@@ -20,6 +17,7 @@ public class Area_PhaseChage : MonoBehaviour
     [Header("---Player UI---")]
     [SerializeField] private GameObject playerUI;
 
+
     private void Start()
     {
         InvokeRepeating(nameof(MapChage), 1, 1);
@@ -28,22 +26,12 @@ public class Area_PhaseChage : MonoBehaviour
 
     public void UIOnOff(bool isOn)
     {
-        if(isOn)
-        {
-            playerUI.SetActive(true);
-        }
-        else
-        {
-            playerUI.SetActive(false);
-        }
+        playerUI.SetActive(isOn);
     }
 
     public void SpawnSound()
     {
-        if(boss.gameObject.activeSelf == false)
-        {
-            return;
-        }
+        if(boss.gameObject.activeSelf == false) return;
 
         if(boss.isSoundOn && !isPlay)
         {
