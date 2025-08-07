@@ -28,4 +28,4 @@
 - https://www.youtube.com/watch?v=N9bv2AzPrwU
 
 ## 기술 문서
-- 
+- https://docs.google.com/presentation/d/1XEvN4HrY9Y6z7gwnbGyDo81pmx9Gcq5D_wUHJaI8PI0/edit?usp=sharing
